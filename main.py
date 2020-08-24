@@ -11,27 +11,27 @@ python main.py inference --content ./path/to/content.jpg   \
                          --alpha 1.0 \
                          --checkpoint ./path/to/pretrainind_model
 
- """
+"""
 
- """ Convert pre-trained model to tensorflow-js model
- tensorflowjs_converter --input_format=tf_saved_model --saved_model_tags=serve  checkpoint_dir/model checkpoint_dir/web_model
+""" Convert pre-trained model to tensorflow-js model
+tensorflowjs_converter --input_format=tf_saved_model --saved_model_tags=serve  checkpoint_dir/model checkpoint_dir/web_model
+"""
 
-  """
-  
 
 import os
 import argparse
+import tensorflow as tf
 from train import Trainer
 from inference import Inferencer
 
 
-CONTENT_WEIGHT = 10
-STYLE_WEIGHT = 1
+CONTENT_WEIGHT = 1
+STYLE_WEIGHT = 16
 EXTRACT_LAYERS = ['block1_conv1',
                   'block2_conv1',
                   'block3_conv1',
                   'block4_conv1']
-REFLECT_PADDING = False  # If True, using reflect padding for decoder, but the model will not be able to be converted to tensorflow-js.
+REFLECT_PADDING = True  # If True, using reflect padding for decoder and encoder, but the model cannot be able to be converted to tensorflow-js model.
 
 LEARNING_RATE = 1e-4
 LEARNING_RATE_DECAY = 5e-5
@@ -54,7 +54,7 @@ def main():
     parser.add_argument('command',
                          help="'train' or 'inference'")
     parser.add_argument('--content', required=False,
-                         help='train: Content dataset to train; inference: Content image to stylize'
+                         help='train: Content dataset to train; inference: Content image to stylize',
                          default=CONTENT_DATASET)
     parser.add_argument('--style', required=False,
                          help='train: Style dataset to train; inference: Specific style target',
@@ -125,7 +125,7 @@ def main():
         assert os.path.exists(args.checkpoint), 'Pretrained checkpoints/model path not found !'
 
         parameters = {
-                'model_dir' : args.weights,
+                'model_dir' : args.checkpoint,
                 'result_dir' : args.result,
         }
 

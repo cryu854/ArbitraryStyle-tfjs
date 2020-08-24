@@ -16,7 +16,7 @@ def adaptive_instance_norm(content_feature, style_feature, epsilon=1e-5):
 
 
 class ReflectConv2D(Layer):
-    def __init__(self, filters, kernel_size, strides=1, activation=None, **kwargs):
+    def __init__(self, filters, kernel_size, strides=1, padding='valid', activation=None, **kwargs):
         super(ReflectConv2D, self).__init__(**kwargs)
         pad = kernel_size // 2
         self.relu = activation
@@ -59,44 +59,27 @@ class ResizeSampling(Layer):
         return config
 
 
-def ReflectDecoder(name='ReflectDecoder'):
+def Decoder(reflect_padding, name='Decoder'):
+    conv = ReflectConv2D if reflect_padding else Conv2D
     x_in = Input(shape=(None, None, 512))
-    x = ReflectConv2D(256, 3, 1, activation='relu', name='conv1_1')(x_in)
+    x = conv(256, 3, 1, padding='same', activation='relu', name='conv1_1')(x_in)
     x = ResizeSampling(2, name='up1')(x)
-    x = ReflectConv2D(256, 3, 1, activation='relu', name='conv2_1')(x)
-    x = ReflectConv2D(256, 3, 1, activation='relu', name='conv2_2')(x)
-    x = ReflectConv2D(256, 3, 1, activation='relu', name='conv2_3')(x)
-    x = ReflectConv2D(128, 3, 1, activation='relu', name='conv2_4')(x)
+    x = conv(256, 3, 1, padding='same', activation='relu', name='conv2_1')(x)
+    x = conv(256, 3, 1, padding='same', activation='relu', name='conv2_2')(x)
+    x = conv(256, 3, 1, padding='same', activation='relu', name='conv2_3')(x)
+    x = conv(128, 3, 1, padding='same', activation='relu', name='conv2_4')(x)
     x = ResizeSampling(2, name='up2')(x)
-    x = ReflectConv2D(128, 3, 1, activation='relu', name='conv3_1')(x)
-    x = ReflectConv2D(64, 3, 1, activation='relu', name='conv3_2')(x)
+    x = conv(128, 3, 1, padding='same', activation='relu', name='conv3_1')(x)
+    x = conv(64, 3, 1, padding='same', activation='relu', name='conv3_2')(x)
     x = ResizeSampling(2, name='up3')(x)
-    x = ReflectConv2D(64, 3, 1, activation='relu', name='conv4_1')(x)
-    x_out = ReflectConv2D(3, 3, 1, name='conv4_2')(x) 
+    x = conv(64, 3, 1, padding='same', activation='relu', name='conv4_1')(x)
+    x_out = conv(3, 3, 1, padding='same', name='conv4_2')(x) 
  
     return Model(inputs=[x_in], outputs=[x_out], name=name)
 
 
-def Decoder(name='Decoder'):
-    x_in = Input(shape=(None, None, 512))
-    x = Conv2D(256, 3, 1, padding='same', activation='relu', name='conv1_1')(x_in)
-    x = ResizeSampling(2, name='up1')(x)
-    x = Conv2D(256, 3, 1, padding='same', activation='relu', name='conv2_1')(x)
-    x = Conv2D(256, 3, 1, padding='same', activation='relu', name='conv2_2')(x)
-    x = Conv2D(256, 3, 1, padding='same', activation='relu', name='conv2_3')(x)
-    x = Conv2D(128, 3, 1, padding='same', activation='relu', name='conv2_4')(x)
-    x = ResizeSampling(2, name='up2')(x)
-    x = Conv2D(128, 3, 1, padding='same', activation='relu', name='conv3_1')(x)
-    x = Conv2D(64, 3, 1, padding='same', activation='relu', name='conv3_2')(x)
-    x = ResizeSampling(2, name='up3')(x)
-    x = Conv2D(64, 3, 1, padding='same', activation='relu', name='conv4_1')(x)
-    x_out = Conv2D(3, 3, 1, padding='same', name='conv4_2')(x) 
- 
-    return Model(inputs=[x_in], outputs=[x_out], name=name)
-
-
-def Encoder(extract_layers, weights='imagenet', name='Encoder'):
-    vgg = VGG19(weights=weights)
+def Encoder(reflect_padding, extract_layers, weights='imagenet', name='Encoder'):
+    vgg = VGG19(reflect_padding, weights=weights)
     vgg.trainable = False
 
     outputs = [vgg.get_layer(name).output for name in extract_layers]
@@ -112,33 +95,34 @@ def vgg_preprocess(inputs):
     return preprocessed_inputs
 
 
-def VGG19(weights='imagenet', name='vgg19'):
+def VGG19(reflect_padding, weights='imagenet', name='vgg19'):
+    conv = ReflectConv2D if reflect_padding else Conv2D
     inputs = Input(shape=(None, None, 3))
     # Block 1
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1')(inputs)
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2')(x)
+    x = conv(64, 3, activation='relu', padding='same', name='block1_conv1')(inputs)
+    x = conv(64, 3, activation='relu', padding='same', name='block1_conv2')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool')(x)
     # Block 2
-    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv1')(x)
-    x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block2_conv2')(x)
+    x = conv(128, 3, activation='relu', padding='same', name='block2_conv1')(x)
+    x = conv(128, 3, activation='relu', padding='same', name='block2_conv2')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool')(x)
     # Block 3
-    x = Conv2D(256, (3, 3), activation='relu', padding='same', name='block3_conv1')(x)
-    x = Conv2D(256, (3, 3), activation='relu', padding='same', name='block3_conv2')(x)
-    x = Conv2D(256, (3, 3), activation='relu', padding='same', name='block3_conv3')(x)
-    x = Conv2D(256, (3, 3), activation='relu', padding='same', name='block3_conv4')(x)
+    x = conv(256, 3, activation='relu', padding='same', name='block3_conv1')(x)
+    x = conv(256, 3, activation='relu', padding='same', name='block3_conv2')(x)
+    x = conv(256, 3, activation='relu', padding='same', name='block3_conv3')(x)
+    x = conv(256, 3, activation='relu', padding='same', name='block3_conv4')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block3_pool')(x)
     # Block 4
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block4_conv1')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block4_conv2')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block4_conv3')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block4_conv4')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block4_conv1')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block4_conv2')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block4_conv3')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block4_conv4')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block4_pool')(x)
     # Block 5
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv1')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv2')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv3')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv4')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block5_conv1')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block5_conv2')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block5_conv3')(x)
+    x = conv(512, 3, activation='relu', padding='same', name='block5_conv4')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool')(x)
 
     model = Model(inputs=inputs, outputs=x, name=name)

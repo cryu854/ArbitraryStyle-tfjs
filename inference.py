@@ -12,7 +12,7 @@ class Inferencer:
         create_dir(self.result_dir)
 
 
-    def __call__(self, content_file, style_file, alpha, i):
+    def __call__(self, content_file, style_file, alpha):
         start = time.perf_counter()
 
         content_image = load_image(content_file, training=False)
@@ -24,4 +24,4 @@ class Inferencer:
         _, _, stylized = self.model([content_image, style_image, alpha])
 
         print(f'Time taken is {time.perf_counter()-start:.2f} sec')
-        imsave(stylized, f'{self.result_dir}/result{i}.jpg')
+        imsave(stylized, f'{self.result_dir}/result.jpg')

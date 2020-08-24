@@ -8,7 +8,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers.schedules import InverseTimeDecay
 from tensorflow.keras.losses import MeanSquaredError
 
-from model import ReflectDecoder, Decoder, Encoder, get_STN, vgg_preprocess
+from model import Decoder, Encoder, get_STN, vgg_preprocess
 from utils import create_dir, load_image, imsave
 
 
@@ -53,8 +53,8 @@ class Trainer:
 
     def build_model(self, extract_layers, reflect_padding):
         create_dir(self.checkpoint_dir)
-        self.decoder = ReflectDecoder() if reflect_padding else Decoder()
-        self.encoder = Encoder(extract_layers)
+        self.decoder = Decoder(reflect_padding)
+        self.encoder = Encoder(reflect_padding, extract_layers)
         self.stn = get_STN(self.encoder, self.decoder)
 
 
