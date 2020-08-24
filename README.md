@@ -2,16 +2,16 @@
 
 This is an implementation of [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://openaccess.thecvf.com/content_ICCV_2017/papers/Huang_Arbitrary_Style_Transfer_ICCV_2017_paper.pdf) on Tensorflow 2 and Tensorflow js. 
 
-Demo website : 
+Demo website : https://cryu854.github.io/ArbitraryStyle/
 The model runs purely on your browser, so your data will not be leaked.
 <div align='center'>
-<img src = 'images/src/web_demo.PNG' height="200px">
+<img src = 'images/src/web_demo.PNG' height="480px">
 </div>
 
 The network architecture is conposed of an encoder, a decoder, and an AdaIN layer. The encoder is fixed to the first few layer (up to relu4_1) of a pre-trained [VGG-19](https://arxiv.org/pdf/1409.1556.pdf). The decoder mostly mirrors the encoder, with all pooling layers replaced by nearest up-sampling to reduce checkerboard effects. Set `REFLECT_PADDING=True` to use reflection padding in both encoder and decoder to avoid border artifacts, but the model will not be able to be deployed on the browser.
 
 <div align='center'>
-<img src = 'images/src/architecture.PNG' height="200px">
+<img src = 'images/src/architecture.PNG' height="240px">
 </div>
 
 ## Image Stylization :art:
@@ -33,7 +33,7 @@ python main.py inference --content ./path/to/content.jpg   \
 ### Content-style trade-off
 Use `--alpha` to adjust the stylization intensity. The value should between 0 and 1 (default).
 <div align='center'>
-<img src = 'images/src/interpolate.PNG' height="100px">
+<img src = 'images/src/interpolate.PNG' height="240px">
 </div>
 
 ### Training
