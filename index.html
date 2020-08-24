@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title> Arbitrary Style Transfer </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <main>
+        <input type="file" id="content-file-selector" style="display: none" accept="images/x-png,images/gif,images/jpeg"/>
+        <input type="file" id="style-file-selector" style="display: none" accept="images/x-png,images/gif,images/jpeg"/>
+        <div class="col-8 mt-5">
+            <div class="progress progress-bar progress-bar-striped progress-bar-animated mb-2" style="display:none"> Loading Model </div>
+        </div>
+        
+        <div class="col-8">
+            <select id="model-selector" class="custom-select">
+                <option selected disabled> Select Model </option>
+                <option selected="selected"> Arbitrary </option>
+            </select>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-5">
+                <h2 class="ml-3"> Content Image
+                <select id="content-image-selector" class="ml-3 centered custom-select" style="width:200px;">
+                    <option value="" selected disabled>Select content</option>
+                    <option value="file">Select from file</option>
+                    <option value="avril" selected="selected">avril</option>
+                    <option value="cornell">cornell</option>
+                    <option value="brad_pitt">brad_pitt</option>
+                    <option value="shrine">shrine</option>
+                </select>
+                </h2>
+                <img id="content-image" class="ml-3" src="" width="" height="256"/>
+            </div>
+            <div class="col-5">
+                <h2 class="ml-3"> Style Image 
+                <select id="style-image-selector" class="ml-3 centered custom-select" style="width:200px;">
+                    <option value="" selected disabled>Select style</option>
+                    <option value="file">Select from file</option>
+                    <option value="udnie" selected="selected">udnie</option>
+                    <option value="antimonocromatismo">antimonocromatismo</option>
+                    <option value="face_and_hands">face_and_hands</option>
+                    <option value="flower_of_life">flower_of_life</option>
+                    <option value="higher_than_mountains">higher_than_mountains</option>
+                </select>
+                </h2>
+                <img id="style-image" class="ml-3" src="" width="" height="256"/>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h2 class="ml-3"> Stylized Image <button id="stylized-button" class="btn btn-dark"> Stylize </button>  </h2> 
+                <!-- <label for="stylization-intensity">Stylization intensity</label> -->
+                <input type="range" min="0" max="100" value="100" class="ml-3 custom-range" style="width:300px" id="stylization-intensity">
+                <h5 class="ml-4 mt-1" id="time"></h5>
+                <canvas id="stylized-image" class="ml-3"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+</html>
