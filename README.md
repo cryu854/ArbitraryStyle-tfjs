@@ -7,7 +7,7 @@ The model runs purely on your browser, so your data will not be leaked.
 <img src = 'images/src/web_demo.PNG' height="480px">
 </div>
 <br>
-The network architecture is conposed of an encoder, a decoder, and an AdaIN layer. The encoder is fixed to the first few layer (up to relu4_1) of a pre-trained [VGG-19](https://arxiv.org/pdf/1409.1556.pdf). The decoder mostly mirrors the encoder, with all pooling layers replaced by nearest up-sampling to reduce checkerboard effects. Set `REFLECT_PADDING=True` to use reflection padding in both encoder and decoder to avoid border artifacts, but the model will not be able to be deployed on the browser.
+The network architecture is conposed of an encoder, a decoder, and an AdaIN layer. The encoder is fixed to the first few layer (up to relu4_1) of a pre-trained VGG-19. The decoder mostly mirrors the encoder, with all pooling layers replaced by nearest up-sampling to reduce checkerboard effects. Set `REFLECT_PADDING=True` to use reflection padding in both encoder and decoder to avoid border artifacts, but the model will not be able to be deployed on the browser.
 
 <div align='center'>
 <img src = 'images/src/architecture.PNG' height="240px">
