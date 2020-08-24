@@ -3,6 +3,7 @@
 This is an implementation of [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://openaccess.thecvf.com/content_ICCV_2017/papers/Huang_Arbitrary_Style_Transfer_ICCV_2017_paper.pdf) on Tensorflow 2 and Tensorflow js. 
 
 Demo website : https://cryu854.github.io/ArbitraryStyle/
+
 The model runs purely on your browser, so your data will not be leaked.
 <div align='center'>
 <img src = 'images/src/web_demo.PNG' height="480px">
@@ -33,7 +34,7 @@ python main.py inference --content ./path/to/content.jpg   \
 ### Content-style trade-off
 Use `--alpha` to adjust the stylization intensity. The value should between 0 and 1 (default).
 <div align='center'>
-<img src = 'images/src/interpolate.PNG' height="240px">
+<img src = 'images/src/interpolate.PNG' height="200px">
 </div>
 
 ### Training
