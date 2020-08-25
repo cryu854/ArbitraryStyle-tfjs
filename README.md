@@ -1,6 +1,6 @@
 # Arbitrary Style Transfer in Tensorflow js
 
-This is an implementation of [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://openaccess.thecvf.com/content_ICCV_2017/papers/Huang_Arbitrary_Style_Transfer_ICCV_2017_paper.pdf) on Tensorflow 2 and Tensorflow js. **Demo website** : https://cryu854.github.io/ArbitraryStyle/
+This is an implementation of [Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization](https://openaccess.thecvf.com/content_ICCV_2017/papers/Huang_Arbitrary_Style_Transfer_ICCV_2017_paper.pdf) on Tensorflow 2 and Tensorflow js. **Demo website** : https://cryu854.github.io/ArbitraryStyle-tfjs/
 
 The model runs purely on your browser, so your data will not be leaked.
 <div align='center'>
