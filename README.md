@@ -4,7 +4,7 @@ This is an implementation of [Arbitrary Style Transfer in Real-time with Adaptiv
 
 The model runs purely on your browser, so your data will not be leaked.
 <div align='center'>
-<img src = 'images/src/web_demo.PNG' height="480px">
+<img src = 'images/src/web_demo.jpg' height="480px">
 </div>
 <br>
 
@@ -18,9 +18,9 @@ The network architecture is conposed of an encoder, a decoder, and an AdaIN laye
 ## Image Stylization :art:
 
 <div align = 'center'>
-<a href = 'images/style/udnie.jpg'><img src = 'images/style/udnie.jpg' width = '512px'></a>
-<a href = 'images/src/zi.jpg'><img src = 'images/src/zi.jpg' width = '512px'></a>
-<a href = 'images/src/zi_stata.jpg'><img src = 'images/src/zi_stata.jpg' width = '1024px'></a>
+<a href = 'images/style/udnie.jpg'><img src = 'images/style/udnie.jpg' width = '256px'></a>
+<a href = 'images/src/zi.jpg'><img src = 'images/src/zi.jpg' width = '256px'></a>
+<a href = 'images/src/zi_stata.jpg'><img src = 'images/src/zi_stata.jpg' width = '512px'></a>
 </div>
 
 ### Stylize an image
