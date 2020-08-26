@@ -26,12 +26,12 @@ from inference import Inferencer
 
 
 CONTENT_WEIGHT = 1
-STYLE_WEIGHT = 16
+STYLE_WEIGHT = 10
 EXTRACT_LAYERS = ['block1_conv1',
                   'block2_conv1',
                   'block3_conv1',
                   'block4_conv1']
-REFLECT_PADDING = True  # If True, using reflect padding for decoder and encoder, but the model cannot be able to be converted to tensorflow-js model.
+REFLECT_PADDING = False  # If True, using reflect padding for decoder and encoder, but the model cannot be able to be converted to tensorflow-js model.
 
 LEARNING_RATE = 1e-4
 LEARNING_RATE_DECAY = 5e-5

@@ -17,7 +17,11 @@ The network architecture is conposed of an encoder, a decoder, and an AdaIN laye
 
 ## Image Stylization :art:
 
-
+<div align = 'center'>
+<a href = 'images/style/udnie.jpg'><img src = 'images/style/udnie.jpg' width = '512px'></a>
+<a href = 'images/src/zi.jpg'><img src = 'images/src/zi.jpg' width = '512px'></a>
+<a href = 'images/src/zi_stata.jpg'><img src = 'images/src/zi_stata.jpg' width = '1024px'></a>
+</div>
 
 ### Stylize an image
 Use `main.py` to stylize a content image to arbitrary style. 
