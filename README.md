@@ -18,9 +18,7 @@ The network architecture is conposed of an encoder, a decoder, and an AdaIN laye
 ## Image Stylization :art:
 
 <div align = 'center'>
-<a href = 'images/style/udnie.jpg'><img src = 'images/style/udnie.jpg' width = '256px'></a>
-<a href = 'images/src/zi.jpg'><img src = 'images/src/zi.jpg' width = '256px'></a>
-<a href = 'images/src/zi_stata.jpg'><img src = 'images/src/zi_stata.jpg' width = '512px'></a>
+<a href = 'images/src/example.PNG'><img src = 'images/src/example.PNG' height = '640px'></a>
 </div>
 
 ### Stylize an image
