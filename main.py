@@ -130,7 +130,10 @@ def main():
         }
 
         model = Inferencer(**parameters)
-        model(args.content, args.style, args.alpha)
+        content_image = model.preprocess_file(args.content)
+        style_image = model.preprocess_file(args.style)
+        stylized = model(content_image, style_image, args.alpha)
+        model.save(stylized)
 
 
     else:

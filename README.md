@@ -23,7 +23,7 @@ The network architecture is conposed of an encoder, a decoder, and an AdaIN laye
 
 ### Stylize an image
 Use `main.py` to stylize a content image to arbitrary style. 
-Stylization takes 39ms per frame(256x256) on a GTX 1080ti.
+Stylization takes 29ms per frame(256x256) on a GTX 1080ti.
 
 Example usage:
 ```
