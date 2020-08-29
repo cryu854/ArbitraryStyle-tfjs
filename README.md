@@ -47,7 +47,7 @@ Training takes 2.5~3 hours on a GTX 1080ti.
 Example usage:
 
 ```
-python main.py train --content ./path/to/MSC0C0_dataset   \
+python main.py train --content ./path/to/MSCOCO_dataset   \
                      --style ./path/to/WikiArt_dataset \
                      --batch 8 \
                      --debug True \
