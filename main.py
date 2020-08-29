@@ -1,6 +1,6 @@
 """ USAGE
-python main.py train --content ./path/to/style/image.jpg(video.mp4)   \
-                     --style ./path/to/dataset \
+python main.py train --content ./path/to/MSC0C0_dataset   \
+                     --style ./path/to/WikiArt_dataset \
                      --batch 8 \
                      --debug True \
                      --validate_content ./path/to/validate/content.jpg \
