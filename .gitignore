@@ -1,3 +1,5 @@
 __pycache__
-checkpoint_dir
+checkpoints
+models
+results
 log

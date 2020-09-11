@@ -14,16 +14,15 @@ from utils import create_dir, load_image, imsave
 
 class Trainer:
     def __init__(self,
-                 content_dir,
-                 style_dir,
+                 content_path,
+                 style_path,
                  batch_size,
-                 checkpoint_dir,
+                 model_path,
                  debug,
                  validate_content,
                  validate_style,
                  style_weight,
                  content_weight,
-                 extract_layers,
                  reflect_padding,
                  num_epochs,
                  learning_rate,
@@ -35,11 +34,11 @@ class Trainer:
         self.learning_schedule = InverseTimeDecay(initial_learning_rate=learning_rate, decay_steps=1, decay_rate=lr_decay)
         self.optimizer = Adam(learning_rate=self.learning_schedule, beta_1=0.9)
         self.mse = MeanSquaredError()
-        self.checkpoint_dir = checkpoint_dir
+        self.model_path = model_path
         self.debug = debug
-        self.build_model(extract_layers, reflect_padding)
-        self.content_dataset = self.create_dataset(content_dir, batch_size)
-        self.style_dataset = self.create_dataset(style_dir, batch_size)
+        self.build_model_ckpt(reflect_padding)
+        self.content_dataset = self.create_dataset(content_path, batch_size)
+        self.style_dataset = self.create_dataset(style_path, batch_size)
         
         if debug:
             self.create_summary_writer()
@@ -51,12 +50,24 @@ class Trainer:
             create_dir('./results')
             
 
-    def build_model(self, extract_layers, reflect_padding):
-        create_dir(self.checkpoint_dir)
+    def build_model_ckpt(self, reflect_padding):
+        create_dir(self.model_path)
+        create_dir('./checkpoints')
         self.decoder = Decoder(reflect_padding)
-        self.encoder = Encoder(reflect_padding, extract_layers)
+        self.encoder = Encoder(reflect_padding)
         self.stn = get_STN(self.encoder, self.decoder)
-
+        self.ckpt = tf.train.Checkpoint(step=tf.Variable(0),
+                                        Decoder=self.decoder,
+                                        Encoder=self.encoder,
+                                        STN=self.stn,
+                                        optimizer=self.optimizer)
+        self.ckpt_manager = tf.train.CheckpointManager(checkpoint=self.ckpt,
+                                                       directory='./checkpoints',
+                                                       max_to_keep=5)
+        if self.ckpt_manager.latest_checkpoint:
+            self.ckpt.restore(self.ckpt_manager.latest_checkpoint)
+            print(f'Latest checkpoint restored at step {self.ckpt.step.numpy()}')
+        
 
     def create_dataset(self, dir, batch_size):
         dataset = tf.data.Dataset.list_files(dir + '/*.jpg')
@@ -71,7 +82,6 @@ class Trainer:
 
 
     def train(self):
-        step = 0
         start = time.perf_counter()
 
         for epoch in range(0, self.num_epochs):
@@ -81,24 +91,23 @@ class Trainer:
                 
                 metrics = self.train_step(content_images, style_images)
 
-                step += 1
-                if step % 3000 == 0:
+                self.ckpt.step.assign_add(1)
+                if self.ckpt.step % 3000 == 0:
  
                     if self.debug: 
                         """ Validating """
                         _, _, validate_output = self.stn([self.validate_content, self.validate_style, tf.constant([1.0])])
-                        imsave(validate_output, f'./results/validate{step}.jpg')
+                        imsave(validate_output, f'./results/validate{self.ckpt.step.numpy()}.jpg')
 
-                        self.write_summaries(metrics, step)
-                        self.update_metrics(metrics, step)
+                        self.write_summaries(metrics, self.ckpt.step.numpy())
+                        self.update_metrics(metrics, self.ckpt.step.numpy())
 
-                    tf.saved_model.save(self.stn, os.path.join(self.checkpoint_dir, 'model'))
-                    print(f'Time taken so far at step: {step} is {time.perf_counter()-start:.2f} sec')
+                    self.ckpt_manager.save(checkpoint_number=self.ckpt.step.numpy())
                     print('=====================================')
-                    print(f'     Step {step}: weights saved!    ')
+                    print(f'     Step {self.ckpt.step.numpy()}: ckpt saved!    ')
                     print('=====================================\n')
 
-            tf.saved_model.save(self.stn, os.path.join(self.checkpoint_dir, 'model'))
+            tf.saved_model.save(self.stn, os.path.join(self.model_path, 'model'))
             print('=====================================')
             print(f'       Epoch {epoch+1} saved!       ')
             print('=====================================\n')

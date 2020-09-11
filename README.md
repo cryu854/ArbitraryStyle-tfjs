@@ -30,7 +30,7 @@ Example usage:
 python main.py inference --content ./path/to/content.jpg   \
                          --style ./path/to/style.jpg \
                          --alpha 1.0 \
-                         --checkpoint ./path/to/pretrainind_model
+                         --model ./path/to/pre-trainind_model
 ```
 
 ### Content-style trade-off
@@ -47,8 +47,8 @@ Training takes 2.5~3 hours on a GTX 1080ti.
 Example usage:
 
 ```
-python main.py train --content ./path/to/style/image.jpg(video.mp4)   \
-                     --style ./path/to/dataset \
+python main.py train --content ./path/to/MSCOCO_dataset   \
+                     --style ./path/to/WikiArt_dataset \
                      --batch 8 \
                      --debug True \
                      --validate_content ./path/to/validate/content.jpg \
@@ -61,7 +61,7 @@ If you use **reflection padding** in encoder or decoder, the converter will not 
 
 Example usage:
 ```
-tensorflowjs_converter --input_format=tf_saved_model --saved_model_tags=serve  checkpoint_dir/model checkpoint_dir/web_model
+tensorflowjs_converter --input_format=tf_saved_model --saved_model_tags=serve  models/model models/web_model
 ```
 
 ## Requirements

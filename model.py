@@ -78,11 +78,15 @@ def Decoder(reflect_padding, name='Decoder'):
     return Model(inputs=[x_in], outputs=[x_out], name=name)
 
 
-def Encoder(reflect_padding, extract_layers, weights='imagenet', name='Encoder'):
+def Encoder(reflect_padding, weights='imagenet', name='Encoder'):
+    EXTRACT_LAYERS = ['block1_conv1',
+                      'block2_conv1',
+                      'block3_conv1',
+                      'block4_conv1']
     vgg = VGG19(reflect_padding, weights=weights)
     vgg.trainable = False
 
-    outputs = [vgg.get_layer(name).output for name in extract_layers]
+    outputs = [vgg.get_layer(name).output for name in EXTRACT_LAYERS]
 
     return Model(inputs=[vgg.input], outputs=outputs, name=name)
 

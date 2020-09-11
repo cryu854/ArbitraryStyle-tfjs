@@ -15,6 +15,7 @@ def create_dir(dir):
     return dir
 
 
+@tf.function
 def load_image(file_name, training=True):
     """Load an image from directory
     Args:

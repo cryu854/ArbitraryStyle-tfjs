@@ -5,11 +5,11 @@ from utils import create_dir, load_image, imsave
 
 
 class Inferencer:
-    def __init__(self, model_dir, result_dir):
-        self.model = tf.keras.models.load_model(model_dir, compile=False)
-        self.result_dir = result_dir
+    def __init__(self, model_path, result_path):
+        self.model = tf.keras.models.load_model(model_path, compile=False)
+        self.result_path = result_path
         self.num = 0
-        create_dir(self.result_dir)
+        create_dir(self.result_path)
         
 
     @tf.function(experimental_relax_shapes=True)
@@ -26,4 +26,4 @@ class Inferencer:
 
     def save(self, image):
         self.num += 1
-        imsave(image, f'{self.result_dir}/result{self.num}.jpg')
+        imsave(image, f'{self.result_path}/result{self.num}.jpg')
